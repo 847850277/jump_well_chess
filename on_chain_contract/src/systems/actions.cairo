@@ -123,7 +123,7 @@ pub mod actions {
             //            position_two: players_one.position_two,
             //            can_move: true,
             //};
-            world.write_model(@players_one);
+            //world.write_model(@players_one);
 
             // init player_two
             let players_two = Players {
