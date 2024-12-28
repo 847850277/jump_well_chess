@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0x4f22d0750fb228582a6467b0018e0504d1dbfc51e59c969dae7f2a661969267",
-    "seed": "dojo_starter_jump_chess_1",
+    "address": "0x593e47c45b346750b97c3411a202d4d2010a10b49571e0d967bed3e2943bbc5",
+    "seed": "dojo_starter_jump_chess_2",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -1243,8 +1243,8 @@
   },
   "contracts": [
     {
-      "address": "0x3726abeb24d67cee6175899daab5131047f4946f8254718810849b8e0a27033",
-      "class_hash": "0x3ed892b5df92200cbf2d03ede91eb00d12c0bf863274bdcb2c0115cb7b4c443",
+      "address": "0x4b5c51eee7bd0cc5dca86bafbd378911985d7acc0d9e2a81603caf71b9a1026",
+      "class_hash": "0x2004974327fe5bbc7f576c828c3ce8ab5e125bc9f7eb57b5c1b9267e2bdeb7b",
       "abi": [
         {
           "type": "impl",
@@ -1361,7 +1361,11 @@
               "type": "function",
               "name": "create_game",
               "inputs": [],
-              "outputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
               "state_mutability": "external"
             },
             {
@@ -1522,7 +1526,7 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x6430fee6b6682466bd109351ccf51f3716cce85a94add0f14bacac5e09a4208",
+      "class_hash": "0x38657905788a3ea1bc3b69a12e3aa5353f4bde911b4e4eb43c3f724041f40b7",
       "tag": "dojo_starter-Container",
       "selector": "0x190e5bbd442fd67623dd73646446e3393a3d17f5838cd7d0567795123f682e1"
     },

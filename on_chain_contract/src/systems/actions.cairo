@@ -6,7 +6,7 @@ trait IActions<T> {
     // create_game
     fn create_game(ref self: T) -> u32;
     // joining_game
-    fn joining_game(ref self: T, game_id: u32);
+    fn joining_game(ref self: T);
 
     // game move function,then return the game result true means you win, false means game continue
     fn move(ref self: T, direction: Direction, position: u32) -> bool;
@@ -29,7 +29,7 @@ pub mod actions {
         // account_1_create_game
         fn create_game(ref self: ContractState) -> u32{
 
-            let game_id = 1;
+            let game_id: u32 = 1;
             // Get the default world.
             let mut world = self.world_default();
             // Get the address of the current caller, possibly the player's address.
@@ -73,7 +73,9 @@ pub mod actions {
         }
 
         // account_2_joining_game
-        fn joining_game(ref self: ContractState, game_id: u32) {
+        fn joining_game(ref self: ContractState) {
+
+            let game_id: u32 = 1;
 
             // Get the default world.
             let mut world = self.world_default();
@@ -81,38 +83,46 @@ pub mod actions {
             let player = get_caller_address();
 
             //TODO check_exist_container
-            let mut exist_container: Container = world.read_model(game_id);
-            assert!(exist_container.game_id != game_id, "container not exist");
+            let mut exist_container: Container = world.read_model((game_id));
+            //assert!(exist_container.game_id != game_id, "container not exist");
 
 
             //TODO exist_player
             //let exist_player: Players = world.read_model(player);
             //assert(exist_player.player == player, 'Player already exist');
 
-
-
             let position_three = Position { player, x: -1, y: -1, name: 'B' };
             let position_four = Position { player, x: 1, y: -1, name: 'C' };
             world.write_model(@position_three);
             world.write_model(@position_four);
-            // update container
-            //for i in 0..exist_container.grids.len() {
-            //    let mut grid_item = exist_container.grids.index(i);
-            //    if grid_item.name == 'B' {
-            //        grid_item.occupied = true;
-            //    }
-            //    if grid_item.name == 'C' {
-            //        grid_item.occupied = true;
-            //    }
-            //    exist_container.grids.set(i, grid_item);
-            //}
-            exist_container.last_move_player = player;
-            world.write_model(@exist_container);
 
+            let mut grids: Array<Item> = array![];
+            // update container
+            let b = 'B';
+            let c = 'C';
+            for i in 0..exist_container.grids.len() {
+                let mut grid_item = *exist_container.grids.at(i);
+                if grid_item.name == b {
+                    grid_item.occupied = true;
+                }
+                if grid_item.name == c {
+                    grid_item.occupied = true;
+                }
+                grids.append(grid_item);
+            };
+            let container = Container { game_id,last_move_player: player, grids };
+            world.write_model(@container);
 
             // player_one can move
-            let mut players_one: Players = world.read_model(exist_container.last_move_player);
-            players_one.can_move = true;
+            // 没有读取到该值
+            //let last_move_player = exist_container.last_move_player;
+            //let mut players_one: Players = world.read_model((last_move_player));
+            //let players_one = Players {
+            //            player: last_move_player,
+            //            position_one: players_one.position_one,
+            //            position_two: players_one.position_two,
+            //            can_move: true,
+            //};
             world.write_model(@players_one);
 
             // init player_two
