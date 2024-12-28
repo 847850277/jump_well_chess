@@ -4,11 +4,11 @@ use dojo_starter::models::{Direction};
 #[starknet::interface]
 trait IActions<T> {
     // create_game
-    fn create_game(ref self: T);
+    fn create_game(ref self: T) -> u32;
     // joining_game
-    fn joining_game(ref self: T);
+    fn joining_game(ref self: T, game_id: u32);
 
-    // game move function
+    // game move function,then return the game result true means you win, false means game continue
     fn move(ref self: T, direction: Direction, position: u32) -> bool;
 }
 
@@ -26,12 +26,18 @@ pub mod actions {
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
 
-        fn create_game(ref self: ContractState) {
+        // account_1_create_game
+        fn create_game(ref self: ContractState) -> u32{
 
+            let game_id = 1;
             // Get the default world.
             let mut world = self.world_default();
             // Get the address of the current caller, possibly the player's address.
             let player = get_caller_address();
+
+            //TODO exist_player
+            //let exist_player: Players = world.read_model(player);
+            //assert(exist_player.player == player, 'Player already exist');
 
             // init container
             let mut grids: Array<Item> = array![];
@@ -46,7 +52,7 @@ pub mod actions {
             grids.append(item_d);
             grids.append(item_e);
 
-            let container = Container { last_move_player: player, grids };
+            let container = Container { game_id,last_move_player: player, grids };
             world.write_model(@container);
             // init position
             let position_one = Position { player, x: -1, y: 1, name: 'A' };
@@ -54,12 +60,69 @@ pub mod actions {
             world.write_model(@position_one);
             world.write_model(@position_two);
 
-
             // init player
+            let players_one = Players {
+                        player,
+                        position_one,
+                        position_two,
+                        can_move: false,
+            };
+            world.write_model(@players_one);
 
+            game_id
         }
 
-        fn joining_game(ref self: ContractState) {
+        // account_2_joining_game
+        fn joining_game(ref self: ContractState, game_id: u32) {
+
+            // Get the default world.
+            let mut world = self.world_default();
+            // Get the address of the current caller, possibly the player's address.
+            let player = get_caller_address();
+
+            //TODO check_exist_container
+            let mut exist_container: Container = world.read_model(game_id);
+            assert!(exist_container.game_id != game_id, "container not exist");
+
+
+            //TODO exist_player
+            //let exist_player: Players = world.read_model(player);
+            //assert(exist_player.player == player, 'Player already exist');
+
+
+
+            let position_three = Position { player, x: -1, y: -1, name: 'B' };
+            let position_four = Position { player, x: 1, y: -1, name: 'C' };
+            world.write_model(@position_three);
+            world.write_model(@position_four);
+            // update container
+            //for i in 0..exist_container.grids.len() {
+            //    let mut grid_item = exist_container.grids.index(i);
+            //    if grid_item.name == 'B' {
+            //        grid_item.occupied = true;
+            //    }
+            //    if grid_item.name == 'C' {
+            //        grid_item.occupied = true;
+            //    }
+            //    exist_container.grids.set(i, grid_item);
+            //}
+            exist_container.last_move_player = player;
+            world.write_model(@exist_container);
+
+
+            // player_one can move
+            let mut players_one: Players = world.read_model(exist_container.last_move_player);
+            players_one.can_move = true;
+            world.write_model(@players_one);
+
+            // init player_two
+            let players_two = Players {
+                        player,
+                        position_one: position_three,
+                        position_two: position_four,
+                        can_move: false,
+            };
+            world.write_model(@players_two);
 
         }
 

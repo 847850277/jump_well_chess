@@ -25,6 +25,7 @@ pub struct Position {
 #[dojo::model]
 pub struct Container {
     #[key]
+    pub game_id: u32,
     pub last_move_player: ContractAddress,
     pub grids: Array<Item>,
 }
