@@ -97,9 +97,8 @@ pub mod actions {
             // Get the address of the current caller, possibly the player's address.
             let player = get_caller_address();
 
-            //TODO check_exist_container
             let mut exist_container: Container = world.read_model(game_id);
-            //assert(exist_container.game_id != game_id, "container not exist");
+            assert!(exist_container.game_id == game_id, "container not exist");
             let position_three = Position { player,name: 1};
             let position_four = Position { player,name: 2};
 
@@ -149,6 +148,7 @@ pub mod actions {
         // move
         fn move(ref self: ContractState, direction: u32, position: u32) -> bool{
             assert!(position == 1 || position == 2, "position must be 1 or 2");
+            assert!(direction == 1 || direction == 2 || direction == 3 || direction == 4 || direction == 5 || direction == 6 || direction == 7 || direction == 8 , "direction must in 1...8");
 
             // Get the default world.
             let mut world = self.world_default();
@@ -207,6 +207,7 @@ pub mod actions {
 
                 // update container
                 let mut grids: Array<Item> = array![];
+                // TODO create  an array to check result
                 for i in 0..exist_container.grids.len() {
                     let mut grid_item = *exist_container.grids.at(i);
                     if grid_item.name == position.name {
@@ -234,6 +235,7 @@ pub mod actions {
             }
             // if can move return false else return true
             // TODO check game result
+            // TODO array [0,1,1,1,1] or [1,1,1,0,1] means game over
 
 
             result
