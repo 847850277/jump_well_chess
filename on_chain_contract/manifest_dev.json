@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0x4a59be0f9649b33466e50af223d7f3ae298f0d7dbb0b98a0d2dcf8e16fcfce7",
-    "seed": "dojo_starter_jump_chess_14",
+    "address": "0x687762c3be7960a7300b765ff31b4c5bb083e80021dd370b2f66583c8e6fa3",
+    "seed": "dojo_starter_jump_chess_18",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -1243,8 +1243,8 @@
   },
   "contracts": [
     {
-      "address": "0x515f0c9ba9d266354b97d55fbabdf5d93a11258f1e0f2bdb01c9cb7f9a9f2a8",
-      "class_hash": "0x59099cdaa360c285296cffbd33d54ce0106404376d0dc8466c753d336a715f1",
+      "address": "0x7f457832c34bc06431c45c10be80be982a85159832d16c5c77c7058a038c352",
+      "class_hash": "0x7fad46c242c5e42050afae900992cbafdbe98901590e1b3fa3b96ff0f6cba7c",
       "abi": [
         {
           "type": "impl",
@@ -1303,44 +1303,6 @@
         },
         {
           "type": "enum",
-          "name": "dojo_starter::models::Direction",
-          "variants": [
-            {
-              "name": "Left",
-              "type": "()"
-            },
-            {
-              "name": "Right",
-              "type": "()"
-            },
-            {
-              "name": "Up",
-              "type": "()"
-            },
-            {
-              "name": "Down",
-              "type": "()"
-            },
-            {
-              "name": "LeftDown",
-              "type": "()"
-            },
-            {
-              "name": "LeftUp",
-              "type": "()"
-            },
-            {
-              "name": "RightDown",
-              "type": "()"
-            },
-            {
-              "name": "RightUp",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
           "name": "core::bool",
           "variants": [
             {
@@ -1381,7 +1343,7 @@
               "inputs": [
                 {
                   "name": "direction",
-                  "type": "dojo_starter::models::Direction"
+                  "type": "core::integer::u32"
                 },
                 {
                   "name": "position",

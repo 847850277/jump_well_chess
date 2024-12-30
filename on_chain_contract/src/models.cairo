@@ -35,16 +35,17 @@ pub struct Item {
     pub occupied: bool
 }
 
-#[derive(Serde, Copy, Drop, PartialEq, Debug)]
-pub enum Direction {
-    Left,
-    Right,
-    Up,
-    Down,
-    LeftDown,
-    LeftUp,
-    RightDown,
-    RightUp,
-}
+//#[derive(Serde, Copy, Drop, Introspect, PartialEq, Debug)]
+//pub enum Direction {
+//    Left,      //1
+//    Right,     //2
+//    Up,        //3
+//    Down,      //4
+//    LeftDown,  //5
+//    LeftUp,    //6
+//    RightDown, //7
+//    RightUp,   //8
+//}
+
 
 

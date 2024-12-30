@@ -1,4 +1,4 @@
-use dojo_starter::models::{Direction,Position};
+use dojo_starter::models::{Position};
 
 // define the interface
 #[starknet::interface]
@@ -9,13 +9,13 @@ trait IActions<T> {
     fn joining_game(ref self: T);
 
     // game move function,then return the game result true means you win, false means game continue
-    fn move(ref self: T, direction: Direction, position: u32) -> bool;
+    fn move(ref self: T, direction: u32, position: u32) -> bool;
 }
 
 // dojo decorator
 #[dojo::contract]
 pub mod actions {
-    use super::{IActions, Direction,next_position};
+    use super::{IActions,next_position};
     use starknet::{ContractAddress, get_caller_address};
     use dojo_starter::models::{Players, Position,Container,Item};
 
@@ -51,9 +51,9 @@ pub mod actions {
             // Get the address of the current caller, possibly the player's address.
             let player = get_caller_address();
 
-            //TODO exist_player
-            //let exist_player: Players = world.read_model(player);
-            //assert(exist_player.player == player, 'Player already exist');
+            //exist_player
+            let exist_player: Players = world.read_model(player);
+            assert(exist_player.player == player, 'player exist create game');
 
             // init container
             let mut grids: Array<Item> = array![];
@@ -82,9 +82,7 @@ pub mod actions {
                         can_move: false,
             };
             world.write_model(@players_one);
-
-            world.emit_event(@TestEvent { player, game_id });
-
+            //world.emit_event(@TestEvent { player, game_id });
             game_id
         }
 
@@ -100,7 +98,7 @@ pub mod actions {
 
             //TODO check_exist_container
             let mut exist_container: Container = world.read_model(game_id);
-            //assert!(exist_container.game_id != game_id, "container not exist");
+            //assert(exist_container.game_id != game_id, "container not exist");
             let position_three = Position { player, x: -1, y: -1, name: 'B' };
             let position_four = Position { player, x: 1, y: -1, name: 'C' };
 
@@ -142,13 +140,13 @@ pub mod actions {
             };
             world.write_model(@players_two);
 
-            world.emit_event(@TestEventTwo { player, p: players_two});
-            world.emit_event(@TestEventTwo { player, p: players_one});
+            //world.emit_event(@TestEventTwo { player, p: players_two});
+            //world.emit_event(@TestEventTwo { player, p: players_one});
 
         }
 
         // move
-        fn move(ref self: ContractState, direction: Direction, position: u32) -> bool{
+        fn move(ref self: ContractState, direction: u32, position: u32) -> bool{
             assert!(position == 1 || position == 2, "position must be 1 or 2");
 
             // Get the default world.
@@ -163,9 +161,11 @@ pub mod actions {
             // check can move
             assert!(players.can_move == true, "current players can not move");
 
+            let mut result = false;
+
             if(position == 1){
                 let mut position = players.position_one;
-                let new_position = Position { player, x: 0, y: 0, name: 'E' };
+                let new_position = next_position(position, direction);
                 players.position_one = new_position;
                 players.can_move = false;
                 world.write_model(@players);
@@ -230,7 +230,10 @@ pub mod actions {
                 world.write_model(@players_one);
             }
             // if can move return false else return true
-            false
+            // TODO check game result
+
+
+            result
         }
 
     }
@@ -245,44 +248,71 @@ pub mod actions {
     }
 }
 
-fn next_position(mut position: Position, direction: Direction) -> Position {
-     match direction {
-         Direction::Left => {
-            position.x -= 1;
-            return position;
-          },
-         Direction::Right => {
-            position.x += 1;
-            return position;
-         },
-         Direction::Up => {
-            position.y += 1;
-            return position;
-         },
-         Direction::Down => {
-            position.y -= 1;
-            return position;
-         },
-         Direction::LeftDown => {
-             position.x -= 1;
-             position.y -= 1;
-             return position;
-         },
-         Direction::LeftUp => {
-             position.x -= 1;
-             position.y += 1;
-             return position;
-         },
-         Direction::RightDown => {
-             position.x = position.x + 1;
-             position.y = position.y - 1;
-             return position;
-         },
-         Direction::RightUp => {
-             position.x += 1;
-             position.y += 1;
-             return position;
-         },
-     };
+
+fn next_position(mut position: Position, direction: u32) -> Position {
+    if(position.name == 'A'){
+        if(direction == 2){
+            return Position { player: position.player, x: 1, y: 1, name: 'D' };
+        }
+        if(direction == 4){
+           return Position { player: position.player, x: -1, y: -1, name: 'B' };
+        }
+        if(direction == 7){
+            return Position { player: position.player, x: 0, y: 0, name: 'E' };
+        }
+    }
+    if(position.name == 'B'){
+            if(direction == 2){
+                return Position { player: position.player, x: 1, y: -1, name: 'C' };
+            }
+            if(direction == 3){
+                return Position { player: position.player, x: -1, y: 1, name: 'A' };
+            }
+            if(direction == 8){
+                return Position { player: position.player, x: 0, y: 0, name: 'E' };
+            }
+    }
+
+    if(position.name == 'C'){
+        if(direction == 1){
+            return Position { player: position.player, x: -1, y: -1, name: 'B' };
+        }
+        if(direction == 3){
+            return Position { player: position.player, x: 1, y: 1, name: 'D' };
+        }
+        if(direction == 6){
+            return Position { player: position.player, x: 0, y: 0, name: 'E' };
+        }
+
+    }
+
+    if(position.name == 'D'){
+
+        if(direction == 1){
+            return Position { player: position.player, x: -1, y: 1, name: 'A' };
+        }
+        if(direction == 4){
+            return Position { player: position.player, x: 1, y: -1, name: 'C' };
+        }
+        if(direction == 5){
+            return Position { player: position.player, x: 0, y: 0, name: 'E' };
+        }
+    }
+
+    if(position.name == 'E'){
+        if(direction == 5){
+            return Position { player: position.player, x: -1, y: -1, name: 'B' };
+        }
+        if(direction == 6){
+            return Position { player: position.player, x: -1, y: 1, name: 'A' };
+        }
+        if(direction == 7){
+            return Position { player: position.player, x: 1, y: -1, name: 'C' };
+        }
+        if(direction == 8){
+            return Position { player: position.player, x: 1, y: 1, name: 'D' };
+        }
+    }
+
     position
 }
