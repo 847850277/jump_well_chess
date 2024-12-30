@@ -1,4 +1,4 @@
-use dojo_starter::models::{Direction};
+use dojo_starter::models::{Direction,Position};
 
 // define the interface
 #[starknet::interface]
@@ -15,12 +15,28 @@ trait IActions<T> {
 // dojo decorator
 #[dojo::contract]
 pub mod actions {
-    use super::{IActions, Direction};
+    use super::{IActions, Direction,next_position};
     use starknet::{ContractAddress, get_caller_address};
     use dojo_starter::models::{Players, Position,Container,Item};
 
     use dojo::model::{ModelStorage, ModelValueStorage};
     use dojo::event::EventStorage;
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct TestEvent {
+        #[key]
+        pub player: ContractAddress,
+        pub game_id: u32,
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct TestEventTwo {
+        #[key]
+        pub player: ContractAddress,
+        pub p: Players,
+    }
 
 
     #[abi(embed_v0)]
@@ -57,8 +73,6 @@ pub mod actions {
             // init position
             let position_one = Position { player, x: -1, y: 1, name: 'A' };
             let position_two = Position { player, x: 1, y: 1, name: 'D' };
-            world.write_model(@position_one);
-            world.write_model(@position_two);
 
             // init player
             let players_one = Players {
@@ -68,6 +82,8 @@ pub mod actions {
                         can_move: false,
             };
             world.write_model(@players_one);
+
+            world.emit_event(@TestEvent { player, game_id });
 
             game_id
         }
@@ -83,18 +99,10 @@ pub mod actions {
             let player = get_caller_address();
 
             //TODO check_exist_container
-            let mut exist_container: Container = world.read_model((game_id));
+            let mut exist_container: Container = world.read_model(game_id);
             //assert!(exist_container.game_id != game_id, "container not exist");
-
-
-            //TODO exist_player
-            //let exist_player: Players = world.read_model(player);
-            //assert(exist_player.player == player, 'Player already exist');
-
             let position_three = Position { player, x: -1, y: -1, name: 'B' };
             let position_four = Position { player, x: 1, y: -1, name: 'C' };
-            world.write_model(@position_three);
-            world.write_model(@position_four);
 
             let mut grids: Array<Item> = array![];
             // update container
@@ -114,31 +122,115 @@ pub mod actions {
             world.write_model(@container);
 
             // player_one can move
-            // 没有读取到该值
-            //let last_move_player = exist_container.last_move_player;
-            //let mut players_one: Players = world.read_model((last_move_player));
-            //let players_one = Players {
-            //            player: last_move_player,
-            //            position_one: players_one.position_one,
-            //            position_two: players_one.position_two,
-            //            can_move: true,
-            //};
-            //world.write_model(@players_one);
+            // can not get players_one
+            let last_move_player = exist_container.last_move_player;
+            let mut players_one: Players = world.read_model(last_move_player);
+            let players_one = Players {
+                        player: last_move_player,
+                        position_one: players_one.position_one,
+                        position_two: players_one.position_two,
+                        can_move: true,
+            };
+            world.write_model(@players_one);
 
             // init player_two
             let players_two = Players {
-                        player,
-                        position_one: position_three,
-                        position_two: position_four,
-                        can_move: false,
+                player,
+                position_one: position_three,
+                position_two: position_four,
+                can_move: false,
             };
             world.write_model(@players_two);
 
+            world.emit_event(@TestEventTwo { player, p: players_two});
+            world.emit_event(@TestEventTwo { player, p: players_one});
+
         }
 
+        // move
         fn move(ref self: ContractState, direction: Direction, position: u32) -> bool{
+            assert!(position == 1 || position == 2, "position must be 1 or 2");
 
-            true
+            // Get the default world.
+            let mut world = self.world_default();
+            // Get the address of the current caller, possibly the player's address.
+            let mut player = get_caller_address();
+
+            let game_id: u32 = 1;
+            let mut exist_container: Container = world.read_model(game_id);
+
+            let mut players: Players = world.read_model(player);
+            // check can move
+            assert!(players.can_move == true, "current players can not move");
+
+            if(position == 1){
+                let mut position = players.position_one;
+                let new_position = Position { player, x: 0, y: 0, name: 'E' };
+                players.position_one = new_position;
+                players.can_move = false;
+                world.write_model(@players);
+
+                // update container
+                let mut grids: Array<Item> = array![];
+                for i in 0..exist_container.grids.len() {
+                    let mut grid_item = *exist_container.grids.at(i);
+                    if grid_item.name == position.name {
+                        grid_item.occupied = false;
+                    }
+                    if grid_item.name == new_position.name {
+                        grid_item.occupied = true;
+                    }
+                    grids.append(grid_item);
+                };
+                let container = Container { game_id,last_move_player: player, grids };
+                world.write_model(@container);
+
+                // last_move_player
+                let last_move_player = exist_container.last_move_player;
+                let mut players_two: Players = world.read_model(last_move_player);
+                let players_two = Players {
+                            player: last_move_player,
+                            position_one: players_two.position_one,
+                            position_two: players_two.position_two,
+                            can_move: true,
+                };
+                world.write_model(@players_two);
+            }
+            if(position == 2){
+                let mut position = players.position_two;
+                let new_position = next_position(position, direction);
+                players.position_two = new_position;
+                players.can_move = false;
+                world.write_model(@players);
+
+                // update container
+                let mut grids: Array<Item> = array![];
+                for i in 0..exist_container.grids.len() {
+                    let mut grid_item = *exist_container.grids.at(i);
+                    if grid_item.name == position.name {
+                        grid_item.occupied = false;
+                    }
+                    if grid_item.name == new_position.name {
+                        grid_item.occupied = true;
+                    }
+                    grids.append(grid_item);
+                };
+                let container = Container { game_id,last_move_player: player, grids };
+                world.write_model(@container);
+
+                // last_move_player
+                let last_move_player = exist_container.last_move_player;
+                let mut players_one: Players = world.read_model(last_move_player);
+                let players_one = Players {
+                            player: last_move_player,
+                            position_one: players_one.position_one,
+                            position_two: players_one.position_two,
+                            can_move: true,
+                };
+                world.write_model(@players_one);
+            }
+            // if can move return false else return true
+            false
         }
 
     }
@@ -153,28 +245,44 @@ pub mod actions {
     }
 }
 
-// fn next_position(mut position: Position, direction: Direction) -> Position {
-//     match direction {
-//         Direction::Left => { position.x -= 1; },
-//         Direction::Right => { position.x += 1; },
-//         Direction::Up => { position.y += 1; },
-//         Direction::Down => { position.y -= 1; },
-//         Direction::LeftDown => {
-//             position.x -= 1;
-//             position.y -= 1;
-//         },
-//         Direction::LeftUp => {
-//             position.x -= 1;
-//             position.y += 1;
-//         },
-//         Direction::RightDown => {
-//             position.x += 1;
-//             position.y -= 1;
-//         },
-//         Direction::RightUp => {
-//             position.x += 1;
-//             position.y += 1;
-//         },
-//     };
-//     position
-// }
+fn next_position(mut position: Position, direction: Direction) -> Position {
+     match direction {
+         Direction::Left => {
+            position.x -= 1;
+            return position;
+          },
+         Direction::Right => {
+            position.x += 1;
+            return position;
+         },
+         Direction::Up => {
+            position.y += 1;
+            return position;
+         },
+         Direction::Down => {
+            position.y -= 1;
+            return position;
+         },
+         Direction::LeftDown => {
+             position.x -= 1;
+             position.y -= 1;
+             return position;
+         },
+         Direction::LeftUp => {
+             position.x -= 1;
+             position.y += 1;
+             return position;
+         },
+         Direction::RightDown => {
+             position.x = position.x + 1;
+             position.y = position.y - 1;
+             return position;
+         },
+         Direction::RightUp => {
+             position.x += 1;
+             position.y += 1;
+             return position;
+         },
+     };
+    position
+}

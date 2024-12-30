@@ -4,7 +4,7 @@ description = "The official Dojo Starter guide, the quickest and most streamline
 cover_uri = "file://assets/cover.png"
 icon_uri = "file://assets/icon.png"
 website = "https://github.com/dojoengine/dojo-starter"
-seed = "dojo_starter_jump_chess_2"
+seed = "dojo_starter_jump_chess_14"
 
 [world.socials]
 x = "https://x.com/ohayo_dojo"
@@ -17,17 +17,17 @@ default = "dojo_starter"
 
 [env]
 
-rpc_url = "http://localhost:5050/"
-# Default account for katana with seed = 0
-account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
-private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
-# world_address = "0x06171ed98331e849d6084bf2b3e3186a7ddf35574dd68cab4691053ee8ab69d7"
-
-#rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
+#rpc_url = "http://localhost:5050/"
 ## Default account for katana with seed = 0
-#account_address = "0x04097f4882C50bDdBaFe1A79337bDaBDf001456430aDede37F36E47E22d135De"
-#private_key = "0x028a46eddc7615d00e21d31dc959d2721c3cc5b267e381b7fd4c7931f3e61dfe"
+#account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
+#private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
 ## world_address = "0x06171ed98331e849d6084bf2b3e3186a7ddf35574dd68cab4691053ee8ab69d7"
+
+rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
+# Default account for katana with seed = 0
+account_address = "0x04097f4882C50bDdBaFe1A79337bDaBDf001456430aDede37F36E47E22d135De"
+private_key = "0x028a46eddc7615d00e21d31dc959d2721c3cc5b267e381b7fd4c7931f3e61dfe"
+# world_address = "0x06171ed98331e849d6084bf2b3e3186a7ddf35574dd68cab4691053ee8ab69d7"
 
 [writers]
 "dojo_starter" = ["dojo_starter-actions"]

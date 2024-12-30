@@ -11,10 +11,8 @@ pub struct Players {
 }
 
 
-#[derive(Copy, Drop, Serde, Debug)]
-#[dojo::model]
+#[derive(Copy, Drop, Serde, IntrospectPacked, Debug)]
 pub struct Position {
-    #[key]
     pub player: ContractAddress,
     pub x: i32,
     pub y: i32,
