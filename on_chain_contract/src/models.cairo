@@ -8,15 +8,14 @@ pub struct Players {
     pub position_one: Position,
     pub position_two: Position,
     pub can_move: bool,
+    pub color: felt252,
 }
 
 
 #[derive(Copy, Drop, Serde, IntrospectPacked, Debug)]
 pub struct Position {
     pub player: ContractAddress,
-    pub x: i32,
-    pub y: i32,
-    pub name: felt252,
+    pub name: u32,
 }
 
 #[derive(Drop, Serde, Debug)]
@@ -31,7 +30,7 @@ pub struct Container {
 
 #[derive(Copy, Drop, Serde, IntrospectPacked, Debug)]
 pub struct Item {
-    pub name: felt252,
+    pub name: u32,
     pub occupied: bool
 }
 

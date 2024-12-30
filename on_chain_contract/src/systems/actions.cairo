@@ -53,15 +53,15 @@ pub mod actions {
 
             //exist_player
             let exist_player: Players = world.read_model(player);
-            assert(exist_player.player == player, 'player exist create game');
+            assert(exist_player.player == player, 'player existed');
 
             // init container
             let mut grids: Array<Item> = array![];
-            let item_a = Item {  name: 'A',occupied: true};
-            let item_b = Item {  name: 'B',occupied: false};
-            let item_c = Item {  name: 'C',occupied: false};
-            let item_d = Item {  name: 'D',occupied: true};
-            let item_e = Item {  name: 'E',occupied: false};
+            let item_a = Item {  name: 0,occupied: true};
+            let item_b = Item {  name: 1,occupied: false};
+            let item_c = Item {  name: 2,occupied: false};
+            let item_d = Item {  name: 3,occupied: true};
+            let item_e = Item {  name: 4,occupied: false};
             grids.append(item_a);
             grids.append(item_b);
             grids.append(item_c);
@@ -71,8 +71,8 @@ pub mod actions {
             let container = Container { game_id,last_move_player: player, grids };
             world.write_model(@container);
             // init position
-            let position_one = Position { player, x: -1, y: 1, name: 'A' };
-            let position_two = Position { player, x: 1, y: 1, name: 'D' };
+            let position_one = Position { player,name: 0};
+            let position_two = Position { player,name: 3};
 
             // init player
             let players_one = Players {
@@ -80,6 +80,7 @@ pub mod actions {
                         position_one,
                         position_two,
                         can_move: false,
+                        color: 'Green',
             };
             world.write_model(@players_one);
             //world.emit_event(@TestEvent { player, game_id });
@@ -99,19 +100,17 @@ pub mod actions {
             //TODO check_exist_container
             let mut exist_container: Container = world.read_model(game_id);
             //assert(exist_container.game_id != game_id, "container not exist");
-            let position_three = Position { player, x: -1, y: -1, name: 'B' };
-            let position_four = Position { player, x: 1, y: -1, name: 'C' };
+            let position_three = Position { player,name: 1};
+            let position_four = Position { player,name: 2};
 
             let mut grids: Array<Item> = array![];
             // update container
-            let b = 'B';
-            let c = 'C';
             for i in 0..exist_container.grids.len() {
                 let mut grid_item = *exist_container.grids.at(i);
-                if grid_item.name == b {
+                if grid_item.name == 1 {
                     grid_item.occupied = true;
                 }
-                if grid_item.name == c {
+                if grid_item.name == 2 {
                     grid_item.occupied = true;
                 }
                 grids.append(grid_item);
@@ -128,6 +127,7 @@ pub mod actions {
                         position_one: players_one.position_one,
                         position_two: players_one.position_two,
                         can_move: true,
+                        color: players_one.color,
             };
             world.write_model(@players_one);
 
@@ -137,6 +137,7 @@ pub mod actions {
                 position_one: position_three,
                 position_two: position_four,
                 can_move: false,
+                color: 'ORANGE',
             };
             world.write_model(@players_two);
 
@@ -193,6 +194,7 @@ pub mod actions {
                             position_one: players_two.position_one,
                             position_two: players_two.position_two,
                             can_move: true,
+                            color: players_two.color,
                 };
                 world.write_model(@players_two);
             }
@@ -226,6 +228,7 @@ pub mod actions {
                             position_one: players_one.position_one,
                             position_two: players_one.position_two,
                             can_move: true,
+                            color: players_one.color,
                 };
                 world.write_model(@players_one);
             }
@@ -250,67 +253,67 @@ pub mod actions {
 
 
 fn next_position(mut position: Position, direction: u32) -> Position {
-    if(position.name == 'A'){
+    if(position.name == 0){
         if(direction == 2){
-            return Position { player: position.player, x: 1, y: 1, name: 'D' };
+            return Position { player: position.player, name: 3 };
         }
         if(direction == 4){
-           return Position { player: position.player, x: -1, y: -1, name: 'B' };
+           return Position { player: position.player, name: 1 };
         }
         if(direction == 7){
-            return Position { player: position.player, x: 0, y: 0, name: 'E' };
+            return Position { player: position.player, name: 4 };
         }
     }
-    if(position.name == 'B'){
+    if(position.name == 1){
             if(direction == 2){
-                return Position { player: position.player, x: 1, y: -1, name: 'C' };
+                return Position { player: position.player, name: 2 };
             }
             if(direction == 3){
-                return Position { player: position.player, x: -1, y: 1, name: 'A' };
+                return Position { player: position.player,  name: 0 };
             }
             if(direction == 8){
-                return Position { player: position.player, x: 0, y: 0, name: 'E' };
+                return Position { player: position.player,  name: 4 };
             }
     }
 
-    if(position.name == 'C'){
+    if(position.name == 2){
         if(direction == 1){
-            return Position { player: position.player, x: -1, y: -1, name: 'B' };
+            return Position { player: position.player, name: 1 };
         }
         if(direction == 3){
-            return Position { player: position.player, x: 1, y: 1, name: 'D' };
+            return Position { player: position.player, name: 3 };
         }
         if(direction == 6){
-            return Position { player: position.player, x: 0, y: 0, name: 'E' };
+            return Position { player: position.player,  name: 4 };
         }
 
     }
 
-    if(position.name == 'D'){
+    if(position.name == 3){
 
         if(direction == 1){
-            return Position { player: position.player, x: -1, y: 1, name: 'A' };
+            return Position { player: position.player,  name: 0 };
         }
         if(direction == 4){
-            return Position { player: position.player, x: 1, y: -1, name: 'C' };
+            return Position { player: position.player,  name: 2 };
         }
         if(direction == 5){
-            return Position { player: position.player, x: 0, y: 0, name: 'E' };
+            return Position { player: position.player, name: 4 };
         }
     }
 
-    if(position.name == 'E'){
+    if(position.name == 4){
         if(direction == 5){
-            return Position { player: position.player, x: -1, y: -1, name: 'B' };
+            return Position { player: position.player, name: 1 };
         }
         if(direction == 6){
-            return Position { player: position.player, x: -1, y: 1, name: 'A' };
+            return Position { player: position.player,  name: 0 };
         }
         if(direction == 7){
-            return Position { player: position.player, x: 1, y: -1, name: 'C' };
+            return Position { player: position.player,  name: 2 };
         }
         if(direction == 8){
-            return Position { player: position.player, x: 1, y: 1, name: 'D' };
+            return Position { player: position.player,  name: 3 };
         }
     }
 
