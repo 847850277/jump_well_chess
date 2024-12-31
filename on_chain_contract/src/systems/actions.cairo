@@ -158,12 +158,17 @@ pub mod actions {
             let game_id: u32 = 1;
             let mut exist_container: Container = world.read_model(game_id);
 
+            // todo check game end status
+
             let mut players: Players = world.read_model(player);
             // check can move
             assert!(players.can_move == true, "current players can not move");
 
-            let mut result = false;
+            //check move is valid
 
+            let mut result = false;
+            //create  an array to check result
+            let mut result_arr: Array<u8> = array![];
             if(position == 1){
                 let mut position = players.position_one;
                 let new_position = next_position(position, direction);
@@ -180,6 +185,11 @@ pub mod actions {
                     }
                     if grid_item.name == new_position.name {
                         grid_item.occupied = true;
+                    }
+                    if grid_item.occupied == true {
+                        result_arr.append(1);
+                    }else{
+                        result_arr.append(0);
                     }
                     grids.append(grid_item);
                 };
@@ -207,7 +217,6 @@ pub mod actions {
 
                 // update container
                 let mut grids: Array<Item> = array![];
-                // TODO create  an array to check result
                 for i in 0..exist_container.grids.len() {
                     let mut grid_item = *exist_container.grids.at(i);
                     if grid_item.name == position.name {
@@ -215,6 +224,11 @@ pub mod actions {
                     }
                     if grid_item.name == new_position.name {
                         grid_item.occupied = true;
+                    }
+                    if grid_item.occupied == true {
+                        result_arr.append(1);
+                    }else{
+                        result_arr.append(0);
                     }
                     grids.append(grid_item);
                 };
@@ -234,10 +248,24 @@ pub mod actions {
                 world.write_model(@players_one);
             }
             // if can move return false else return true
-            // TODO check game result
-            // TODO array [0,1,1,1,1] or [1,1,1,0,1] means game over
+            // check game result
+            // array [0,1,1,1,1] or [1,1,1,0,1] means game over
+            let first_check_value: u8 = *result_arr.at(0);
+            let last_check_value: u8 = *result_arr.at(3);
+            if(first_check_value == 0){
+                // players in position 1、4
+                if(players.position_one.name == 1 && players.position_two.name == 4){
+                    result = true;
+                }
+            }
+            if(last_check_value == 0){
+                // players in position 1、4
+                if(players.position_one.name == 2 && players.position_two.name == 4){
+                    result = true;
+                }
+            }
 
-
+            // todo: game end event
             result
         }
 
