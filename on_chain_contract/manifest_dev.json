@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0x687762c3be7960a7300b765ff31b4c5bb083e80021dd370b2f66583c8e6fa3",
-    "seed": "dojo_starter_jump_chess_18",
+    "address": "0x1709f97d37e99cfc33607e89728836399b33993892770a56b0cdc6697a95ad6",
+    "seed": "dojo_starter_jump_chess_21",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -1243,8 +1243,8 @@
   },
   "contracts": [
     {
-      "address": "0x7f457832c34bc06431c45c10be80be982a85159832d16c5c77c7058a038c352",
-      "class_hash": "0x7fad46c242c5e42050afae900992cbafdbe98901590e1b3fa3b96ff0f6cba7c",
+      "address": "0xffce290c23a56e2467fdcbb3b6a4608f6d49391fbfc792616f192afdbf8cd2",
+      "class_hash": "0x446ff3b6d5a90a42cb9c513405adabc74c28832acdb2939a0b6652fe734d41c",
       "abi": [
         {
           "type": "impl",
@@ -1325,7 +1325,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::integer::u32"
+                  "type": "core::integer::u64"
                 }
               ],
               "state_mutability": "external"
@@ -1333,7 +1333,12 @@
             {
               "type": "function",
               "name": "joining_game",
-              "inputs": [],
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u64"
+                }
+              ],
               "outputs": [],
               "state_mutability": "external"
             },
@@ -1348,6 +1353,10 @@
                 {
                   "name": "position",
                   "type": "core::integer::u32"
+                },
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u64"
                 }
               ],
               "outputs": [
@@ -1488,13 +1497,19 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x38657905788a3ea1bc3b69a12e3aa5353f4bde911b4e4eb43c3f724041f40b7",
+      "class_hash": "0x4681634d6a4d65c21700a100f06eede8c2e4dea5e2ed9f5ec9900d26a7f1110",
       "tag": "dojo_starter-Container",
       "selector": "0x190e5bbd442fd67623dd73646446e3393a3d17f5838cd7d0567795123f682e1"
     },
     {
       "members": [],
-      "class_hash": "0x7348316dcfecb88b4c3d356ca62f2b6a966419468cd4618f377d6f61c5ff29d",
+      "class_hash": "0xe31ccd18f7e4cd23331d28652d4d782f1969801654f44b44aea937a08ba3ab",
+      "tag": "dojo_starter-Counter",
+      "selector": "0x5c36ccd6a852f08c27bb21b6a8b4ec9fa8b520cb8a961cb32fff0944f7a3ceb"
+    },
+    {
+      "members": [],
+      "class_hash": "0x2c7d19f808588cc3f20d14d08831ccd91b58b7ece60b686946afd4170045276",
       "tag": "dojo_starter-Players",
       "selector": "0x21dd725b4c2bbbf428d773ba6870bc0ec3df95aa0fb0b435f2d7c0d567f6c8"
     }
@@ -1502,13 +1517,13 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x1e4da04b27f9a07726869b42445e0190078afd15fe1da8d6ce06a90f5288359",
-      "tag": "dojo_starter-TestEvent",
-      "selector": "0x72d1125c6f37ba88ec3c366829535393203060f8b357b24fcca92a385badcd8"
+      "class_hash": "0x76f9dbcd85df97c3cb6fe522d3e9ec8efc2f563e0f4e7770f5f0e066b75f73c",
+      "tag": "dojo_starter-GameStatusEvent",
+      "selector": "0x57ef549f3995bd34b10b73e0377193ca7ac8e47b403fbd96fcc4f89133604a9"
     },
     {
       "members": [],
-      "class_hash": "0x1941b26634e50d84225e0a90dfbf4a317504f73beb311852b919d48639c6bab",
+      "class_hash": "0x73f02bf4b41a9cae1e214bbac0c0c9f6231a9e65b6f7275f52de4c453ae20ee",
       "tag": "dojo_starter-TestEventTwo",
       "selector": "0x327d2d71929f52f5803997e126626d0aefddf39889e97ac62291686263fc179"
     }
