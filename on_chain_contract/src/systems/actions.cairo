@@ -64,16 +64,16 @@ pub mod actions {
 
             // init container
             let mut grids: Array<Item> = array![];
-            let item_a = Item {  name: 0,occupied: true};
-            let item_b = Item {  name: 1,occupied: false};
-            let item_c = Item {  name: 2,occupied: false};
-            let item_d = Item {  name: 3,occupied: true};
-            let item_e = Item {  name: 4,occupied: false};
-            grids.append(item_a);
-            grids.append(item_b);
-            grids.append(item_c);
-            grids.append(item_d);
-            grids.append(item_e);
+            let item_0 = Item {  name: 0,occupied: true};
+            let item_1 = Item {  name: 1,occupied: false};
+            let item_2 = Item {  name: 2,occupied: false};
+            let item_3 = Item {  name: 3,occupied: true};
+            let item_4 = Item {  name: 4,occupied: false};
+            grids.append(item_0);
+            grids.append(item_1);
+            grids.append(item_2);
+            grids.append(item_3);
+            grids.append(item_4);
 
             let container = Container { game_id,status: game_status,last_move_player: player, grids };
             world.write_model(@container);
