@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0x2f5a8c3debe4f8259cd512d3123100fe705e1e27e8f60369de693f5976a46ef",
-    "seed": "dojo_starter_jump_chess_23",
+    "address": "0xe4907bcc27020583b29fbc425108202033b6825bf123e5fe710c671a15e182",
+    "seed": "dojo_starter_jump_chess_27",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -1243,8 +1243,8 @@
   },
   "contracts": [
     {
-      "address": "0x5c8a7e42a20ab75fc5b644a96113cc5d128b64f0b8eb6217f63bc53dc89bb2c",
-      "class_hash": "0x144723ab0c071829ff43a5fbf0d751aafe7215fc25e53c40b1a1ed16f08c29c",
+      "address": "0x5e3c6181f1f22f8a98e7a738ed6a09f200c9d98b350dbbf39df981efae0fee1",
+      "class_hash": "0x77dfebaff1923621095f41558e253b1367b486ccf0efd3eac68e9ebdd79a155",
       "abi": [
         {
           "type": "impl",
@@ -1347,12 +1347,12 @@
               "name": "move",
               "inputs": [
                 {
-                  "name": "direction",
-                  "type": "core::integer::u32"
+                  "name": "from",
+                  "type": "core::integer::u8"
                 },
                 {
-                  "name": "position",
-                  "type": "core::integer::u32"
+                  "name": "to",
+                  "type": "core::integer::u8"
                 },
                 {
                   "name": "game_id",
@@ -1497,7 +1497,7 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x337b7170b7dbd022fdfbf0abb10e85dfd0eae8f445b68dcfd6ba78601da49d8",
+      "class_hash": "0x286b99c207dc6601381da9e1b77e8044980e18806182a66d70368736f1db4cd",
       "tag": "dojo_starter-Container",
       "selector": "0x190e5bbd442fd67623dd73646446e3393a3d17f5838cd7d0567795123f682e1"
     },
@@ -1509,7 +1509,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x2c7d19f808588cc3f20d14d08831ccd91b58b7ece60b686946afd4170045276",
+      "class_hash": "0x196975a5a73d17b695838e896905e286a17d36855ecf5af28f529bcc24406df",
       "tag": "dojo_starter-Players",
       "selector": "0x21dd725b4c2bbbf428d773ba6870bc0ec3df95aa0fb0b435f2d7c0d567f6c8"
     }
