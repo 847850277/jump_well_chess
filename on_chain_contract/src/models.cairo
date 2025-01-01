@@ -25,6 +25,7 @@ pub struct Container {
     pub game_id: u64,
     // game status 0: created, 1: joined, 2: finished
     pub status: u8,
+    pub creator: ContractAddress,
     pub last_move_player: ContractAddress,
     pub grids: Array<Item>,
 }

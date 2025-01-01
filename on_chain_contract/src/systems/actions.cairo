@@ -30,13 +30,13 @@ pub mod actions {
         pub status: u8,
     }
 
-    #[derive(Copy, Drop, Serde)]
-    #[dojo::event]
-    pub struct TestEventTwo {
-        #[key]
-        pub player: ContractAddress,
-        pub p: Players,
-    }
+    // #[derive(Copy, Drop, Serde)]
+    // #[dojo::event]
+    // pub struct TestEventTwo {
+    //     #[key]
+    //     pub player: ContractAddress,
+    //     pub p: Players,
+    // }
 
 
     #[abi(embed_v0)]
@@ -75,7 +75,7 @@ pub mod actions {
             grids.append(item_3);
             grids.append(item_4);
 
-            let container = Container { game_id,status: game_status,last_move_player: player, grids };
+            let container = Container { game_id,status: game_status,creator: player,last_move_player: player, grids };
             world.write_model(@container);
             // init position
             let position_one = Position { player,name: 0};
@@ -104,8 +104,10 @@ pub mod actions {
             let player = get_caller_address();
 
             let mut exist_container: Container = world.read_model(game_id);
+            // TODO check null
             assert!(exist_container.game_id == game_id, "container not exist");
             assert!(exist_container.status == 0, "game not created");
+            assert(exist_container.creator == player, 'player joined');
             let position_three = Position { player,name: 1};
             let position_four = Position { player,name: 2};
 
@@ -121,7 +123,7 @@ pub mod actions {
                 }
                 grids.append(grid_item);
             };
-            let container = Container { game_id, status: game_status,last_move_player: player, grids };
+            let container = Container { game_id, status: game_status,creator: exist_container.creator,last_move_player: player, grids };
             world.write_model(@container);
 
             // player_one can move
@@ -147,8 +149,6 @@ pub mod actions {
             };
             world.write_model(@players_two);
             world.emit_event(@GameStatusEvent { game_id, status: game_status});
-            //world.emit_event(@TestEventTwo { player, p: players_two});
-            //world.emit_event(@TestEventTwo { player, p: players_one});
 
         }
 
@@ -267,7 +267,7 @@ pub mod actions {
                     game_status = 2;
                 }
             }
-            let container = Container { game_id, status: game_status,last_move_player: player, grids };
+            let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player, grids };
             world.write_model(@container);
             //game end event
             world.emit_event(@GameStatusEvent { game_id, status: game_status});
