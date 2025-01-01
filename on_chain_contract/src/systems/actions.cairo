@@ -103,11 +103,12 @@ pub mod actions {
             // Get the address of the current caller, possibly the player's address.
             let player = get_caller_address();
 
+            // if container not init ,will set default value
             let mut exist_container: Container = world.read_model(game_id);
-            // TODO check null
-            assert!(exist_container.game_id == game_id, "container not exist");
-            assert!(exist_container.status == 0, "game not created");
-            assert(exist_container.creator == player, 'player joined');
+            world.write_model(@exist_container);
+            //check null by creator == 0
+            assert(exist_container.creator.is_non_zero(), 'game must create');
+            assert!(exist_container.status == 0 , "status must 0");
             let position_three = Position { player,name: 1};
             let position_four = Position { player,name: 2};
 
