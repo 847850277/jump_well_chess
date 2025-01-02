@@ -1,4 +1,5 @@
 use dojo_starter::models::{Position};
+use starknet::{ContractAddress};
 
 // define the interface
 #[starknet::interface]
@@ -15,7 +16,7 @@ trait IActions<T> {
 // dojo decorator
 #[dojo::contract]
 pub mod actions {
-    use super::{IActions};
+    use super::{IActions,same_address};
     use starknet::{ContractAddress, get_caller_address};
     use dojo_starter::models::{Players, Position, Container, Item, Counter, CounterTrait};
 
@@ -108,7 +109,8 @@ pub mod actions {
             world.write_model(@exist_container);
             //check null by creator == 0
             assert(exist_container.creator.is_non_zero(), 'game must create');
-            //assert!(exist_container.creator == player , "player must not creator");
+            let same_player = same_address(exist_container.creator, player);
+            assert(!same_player, 'player must not creator');
             assert!(exist_container.status == 0 , "status must 0");
             let position_three = Position { player,name: 1};
             let position_four = Position { player,name: 2};
@@ -290,4 +292,11 @@ pub mod actions {
     }
 }
 
+
+fn same_address(p1: ContractAddress,p2: ContractAddress) -> bool {
+    if(p1 == p2){
+        return true;
+    }
+    false
+}
 
