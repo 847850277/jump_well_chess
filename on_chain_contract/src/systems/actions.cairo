@@ -156,8 +156,6 @@ pub mod actions {
 
         // move
         fn move(ref self: ContractState, from: u8, to: u8, game_id: u64) -> bool{
-            //assert!(position == 1 || position == 2 , "position must be 1 or 2");
-            //assert!(direction == 1 || direction == 2 || direction == 3 || direction == 4 || direction == 5 || direction == 6 || direction == 7 || direction == 8 , "direction must in 1...8");
 
             let mut game_status: u8 = 1;
             // Get the default world.
@@ -168,6 +166,7 @@ pub mod actions {
             //let game_id: u32 = 1;
             let mut exist_container: Container = world.read_model(game_id);
 
+            assert(exist_container.creator.is_non_zero(), 'game must create');
             // check game end status
             assert!(exist_container.status == 1, "game not ing");
 
@@ -178,13 +177,26 @@ pub mod actions {
             let mut result_arr: Array<u8> = array![];
             let mut grids: Array<Item> = array![];
 
-            // can not move 1 --> 3 || 3 --> 1
+            // can not move 0 --> 3 || 3 --> 0
+            if(from == 0 && to == 3){
+                assert(true, 'can not move 0 --> 3');
+            }
+            if(from == 0 && to == 2){
+                assert(true, 'can not move 0 --> 2');
+            }
             if(from == 1 && to == 3){
                 assert(true, 'can not move 1 --> 3');
+            }
+            if(from == 2 && to == 0){
+                assert(true, 'can not move 2 --> 0');
+            }
+            if(from == 3 && to == 0){
+                assert(true, 'can not move 3 --> 0');
             }
             if(from == 3 && to == 1){
                 assert(true, 'can not move 3 --> 1');
             }
+
             // check from is valid position
             let mut valid_position = false;
             if(from == players.position_one.name || from == players.position_two.name){

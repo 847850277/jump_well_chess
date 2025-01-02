@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0xe4907bcc27020583b29fbc425108202033b6825bf123e5fe710c671a15e182",
-    "seed": "dojo_starter_jump_chess_27",
+    "address": "0x15fb7445574e03ade450bb2cfa2def304c2ef27632636ffe2a00a4de2beeeda",
+    "seed": "dojo_starter_jump_chess_28",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -1243,8 +1243,8 @@
   },
   "contracts": [
     {
-      "address": "0x5e3c6181f1f22f8a98e7a738ed6a09f200c9d98b350dbbf39df981efae0fee1",
-      "class_hash": "0x77dfebaff1923621095f41558e253b1367b486ccf0efd3eac68e9ebdd79a155",
+      "address": "0x3e1e1d591567a0268ce4f39e3dba774fd510cbea4cc428eff947d424375d225",
+      "class_hash": "0x19ca343a9428e5a7fadcd5c4d3e34b8d0baca2985ec86f7d28dea06145d522c",
       "abi": [
         {
           "type": "impl",
