@@ -34,7 +34,8 @@ pub struct Container {
 #[derive(Copy, Drop, Serde, IntrospectPacked, Debug)]
 pub struct Item {
     pub name: u8,
-    pub occupied: bool
+    pub occupied: bool,
+    pub player: ContractAddress,
 }
 
 #[derive(Copy, Drop, Serde, Debug)]

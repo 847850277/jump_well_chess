@@ -63,13 +63,14 @@ pub mod actions {
             let exist_player: Players = world.read_model(player);
             assert(exist_player.player == player, 'player existed');
 
+            //let contract_zero: ContractAddress  = 0;
             // init container
             let mut grids: Array<Item> = array![];
-            let item_0 = Item {  name: 0,occupied: true};
-            let item_1 = Item {  name: 1,occupied: false};
-            let item_2 = Item {  name: 2,occupied: false};
-            let item_3 = Item {  name: 3,occupied: true};
-            let item_4 = Item {  name: 4,occupied: false};
+            let item_0 = Item {  name: 0,occupied: true,player: player};
+            let item_1 = Item {  name: 1,occupied: false,player: player};
+            let item_2 = Item {  name: 2,occupied: false,player: player};
+            let item_3 = Item {  name: 3,occupied: true,player: player};
+            let item_4 = Item {  name: 4,occupied: false,player: player};
             grids.append(item_0);
             grids.append(item_1);
             grids.append(item_2);
@@ -109,7 +110,7 @@ pub mod actions {
             world.write_model(@exist_container);
             //check null by creator == 0
             assert(exist_container.creator.is_non_zero(), 'game must create');
-            let same_player = same_address(exist_container.creator, player);
+            let same_player = same_address(player, exist_container.creator);
             assert(!same_player, 'player must not creator');
             assert!(exist_container.status == 0 , "status must 0");
             let position_three = Position { player,name: 1};
@@ -121,9 +122,11 @@ pub mod actions {
                 let mut grid_item = *exist_container.grids.at(i);
                 if grid_item.name == 1 {
                     grid_item.occupied = true;
+                    grid_item.player = player;
                 }
                 if grid_item.name == 2 {
                     grid_item.occupied = true;
+                    grid_item.player = player;
                 }
                 grids.append(grid_item);
             };
@@ -230,9 +233,11 @@ pub mod actions {
                 let mut grid_item = *exist_container.grids.at(i);
                 if grid_item.name == from {
                     grid_item.occupied = false;
+                    //TODO player = grid_item.player;
                 }
                 if grid_item.name == to {
                     grid_item.occupied = true;
+                    //TODO player = grid_item.player;
                 }
                 if grid_item.occupied == true {
                     result_arr.append(1);
