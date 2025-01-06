@@ -11,6 +11,7 @@ pub struct Players {
     pub position_two: Position,
     pub can_move: bool,
     pub color: felt252,
+    pub is_winner: bool,
 }
 
 

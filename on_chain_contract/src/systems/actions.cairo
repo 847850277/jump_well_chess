@@ -92,6 +92,7 @@ pub mod actions {
                         position_two,
                         can_move: false,
                         color: 'Green',
+                        is_winner: false,
             };
             world.write_model(@players_one);
             world.emit_event(@GameStatusEvent { game_id, status: game_status});
@@ -146,6 +147,7 @@ pub mod actions {
                         position_two: players_one.position_two,
                         can_move: true,
                         color: players_one.color,
+                        is_winner: false,
             };
             world.write_model(@players_one);
 
@@ -157,6 +159,7 @@ pub mod actions {
                 position_two: position_four,
                 can_move: false,
                 color: 'ORANGE',
+                is_winner: false,
             };
             world.write_model(@players_two);
             world.emit_event(@GameStatusEvent { game_id, status: game_status});
@@ -230,7 +233,6 @@ pub mod actions {
                 players.position_two = Position { player, name: to };
             }
             players.can_move = false;
-            world.write_model(@players);
 
             // change container status
             let contract_zero = starknet::contract_address_const::<0x0>();
@@ -238,12 +240,10 @@ pub mod actions {
                 let mut grid_item = *exist_container.grids.at(i);
                 if grid_item.name == from {
                     grid_item.occupied = false;
-                    //TODO player = grid_item.player;
                     grid_item.player = contract_zero;
                 }
                 if grid_item.name == to {
                     grid_item.occupied = true;
-                    //TODO player = grid_item.player;
                     grid_item.player = player;
                 }
                 if grid_item.occupied == true {
@@ -264,6 +264,7 @@ pub mod actions {
                 position_two: players_two.position_two,
                 can_move: true,
                 color: players_two.color,
+                is_winner: false,
             };
             world.write_model(@players_two);
             // if can move return false else return true
@@ -286,6 +287,10 @@ pub mod actions {
                     game_status = 2;
                 }
             }
+            if(game_status == 2){
+                players.is_winner = true;
+            }
+            world.write_model(@players);
             let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player, grids };
             world.write_model(@container);
             //game end event
