@@ -60,17 +60,18 @@ pub mod actions {
             world.write_model(@session_counter);
 
             //exist_player
-            let exist_player: Players = world.read_model(player);
-            assert(exist_player.player == player, 'player existed');
+            //let exist_player: Players = world.read_model(player);
+            //assert(exist_player.player == player, 'player existed');
 
             //let contract_zero: ContractAddress  = 0;
+            let contract_zero = starknet::contract_address_const::<0x0>();
             // init container
             let mut grids: Array<Item> = array![];
             let item_0 = Item {  name: 0,occupied: true,player: player};
-            let item_1 = Item {  name: 1,occupied: false,player: player};
-            let item_2 = Item {  name: 2,occupied: false,player: player};
+            let item_1 = Item {  name: 1,occupied: false,player: contract_zero};
+            let item_2 = Item {  name: 2,occupied: false,player: contract_zero};
             let item_3 = Item {  name: 3,occupied: true,player: player};
-            let item_4 = Item {  name: 4,occupied: false,player: player};
+            let item_4 = Item {  name: 4,occupied: false,player: contract_zero};
             grids.append(item_0);
             grids.append(item_1);
             grids.append(item_2);
@@ -86,6 +87,7 @@ pub mod actions {
             // init player
             let players_one = Players {
                         player,
+                        game_id,
                         position_one,
                         position_two,
                         can_move: false,
@@ -136,9 +138,10 @@ pub mod actions {
             // player_one can move
             // can not get players_one
             let last_move_player = exist_container.last_move_player;
-            let mut players_one: Players = world.read_model(last_move_player);
+            let mut players_one: Players = world.read_model((last_move_player,game_id));
             let players_one = Players {
                         player: last_move_player,
+                        game_id,
                         position_one: players_one.position_one,
                         position_two: players_one.position_two,
                         can_move: true,
@@ -149,6 +152,7 @@ pub mod actions {
             // init player_two
             let players_two = Players {
                 player,
+                game_id,
                 position_one: position_three,
                 position_two: position_four,
                 can_move: false,
@@ -175,7 +179,7 @@ pub mod actions {
             // check game end status
             assert!(exist_container.status == 1, "game not ing");
 
-            let mut players: Players = world.read_model(player);
+            let mut players: Players = world.read_model((player,game_id));
             // check can move
             assert!(players.can_move == true, "current players can not move");
             //create  an array to check result
@@ -229,15 +233,18 @@ pub mod actions {
             world.write_model(@players);
 
             // change container status
+            let contract_zero = starknet::contract_address_const::<0x0>();
             for i in 0..exist_container.grids.len() {
                 let mut grid_item = *exist_container.grids.at(i);
                 if grid_item.name == from {
                     grid_item.occupied = false;
                     //TODO player = grid_item.player;
+                    grid_item.player = contract_zero;
                 }
                 if grid_item.name == to {
                     grid_item.occupied = true;
                     //TODO player = grid_item.player;
+                    grid_item.player = player;
                 }
                 if grid_item.occupied == true {
                     result_arr.append(1);
@@ -249,9 +256,10 @@ pub mod actions {
             //let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player, grids };
             // change player_two status
             let last_move_player = exist_container.last_move_player;
-            let mut players_two: Players = world.read_model(last_move_player);
+            let mut players_two: Players = world.read_model((last_move_player,game_id));
             let players_two = Players {
                 player: last_move_player,
+                game_id,
                 position_one: players_two.position_one,
                 position_two: players_two.position_two,
                 can_move: true,

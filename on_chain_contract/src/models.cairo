@@ -5,6 +5,8 @@ use starknet::ContractAddress;
 pub struct Players {
     #[key]
     pub player: ContractAddress,
+    #[key]
+    pub game_id: u64,
     pub position_one: Position,
     pub position_two: Position,
     pub can_move: bool,
@@ -65,17 +67,6 @@ impl CounterImpl of CounterTrait {
     }
 }
 
-//#[derive(Serde, Copy, Drop, Introspect, PartialEq, Debug)]
-//pub enum Direction {
-//    Left,      //1
-//    Right,     //2
-//    Up,        //3
-//    Down,      //4
-//    LeftDown,  //5
-//    LeftUp,    //6
-//    RightDown, //7
-//    RightUp,   //8
-//}
 
 
 
