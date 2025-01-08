@@ -5,12 +5,12 @@ use starknet::{ContractAddress};
 #[starknet::interface]
 trait IActions<T> {
     // create_game
-    fn create_game(ref self: T) -> u64;
+    fn create_game(ref self: T) -> u8;
     // joining_game
-    fn joining_game(ref self: T, game_id: u64);
+    fn joining_game(ref self: T, game_id: u8);
 
     // game move function,then return the game result true means you win, false means game continue
-    fn move(ref self: T, from: u8, to: u8, game_id: u64) -> bool;
+    fn move(ref self: T, from: u8, to: u8, game_id: u8) -> bool;
 }
 
 // dojo decorator
@@ -27,7 +27,7 @@ pub mod actions {
     #[dojo::event]
     pub struct GameStatusEvent {
         #[key]
-        pub game_id: u64,
+        pub game_id: u8,
         pub status: u8,
     }
 
@@ -44,7 +44,7 @@ pub mod actions {
     impl ActionsImpl of IActions<ContractState> {
 
         // account_1_create_game
-        fn create_game(ref self: ContractState) -> u64{
+        fn create_game(ref self: ContractState) -> u8{
 
             let game_status: u8 = 0;
             // Get the default world.
@@ -100,7 +100,7 @@ pub mod actions {
         }
 
         // account_2_joining_game
-        fn joining_game(ref self: ContractState, game_id: u64) {
+        fn joining_game(ref self: ContractState, game_id: u8) {
 
             let game_status: u8 = 1;
             // Get the default world.
@@ -167,7 +167,7 @@ pub mod actions {
         }
 
         // move
-        fn move(ref self: ContractState, from: u8, to: u8, game_id: u64) -> bool{
+        fn move(ref self: ContractState, from: u8, to: u8, game_id: u8) -> bool{
 
             let mut game_status: u8 = 1;
             // Get the default world.

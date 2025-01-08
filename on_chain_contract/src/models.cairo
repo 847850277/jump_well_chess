@@ -6,7 +6,7 @@ pub struct Players {
     #[key]
     pub player: ContractAddress,
     #[key]
-    pub game_id: u64,
+    pub game_id: u8,
     pub position_one: Position,
     pub position_two: Position,
     pub can_move: bool,
@@ -25,7 +25,7 @@ pub struct Position {
 #[dojo::model]
 pub struct Container {
     #[key]
-    pub game_id: u64,
+    pub game_id: u8,
     // game status 0: created, 1: joined, 2: finished
     pub status: u8,
     pub creator: ContractAddress,
@@ -46,12 +46,12 @@ pub struct Item {
 pub struct Counter {
     #[key]
     pub global_key: felt252,
-    value: u64
+    value: u8
 }
 
 #[generate_trait]
 impl CounterImpl of CounterTrait {
-    fn get_value(self: Counter) -> u64 {
+    fn get_value(self: Counter) -> u8 {
         self.value
     }
 
