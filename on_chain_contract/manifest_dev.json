@@ -1,8 +1,8 @@
 {
   "world": {
-    "class_hash": "0x79d9ce84b97bcc2a631996c3100d57966fc2f5b061fb1ec4dfd0040976bcac6",
-    "address": "0x7ca1467b58f2515f15e87792c805d2e9765500d3d5a7cfcc73dd86c00b28698",
-    "seed": "dojo_starter_jump_chess_37",
+    "class_hash": "0x45575a88cc5cef1e444c77ce60b7b4c9e73a01cbbe20926d5a4c72a94011410",
+    "address": "0x60765817a04d56fbf1ad01f170ab061b1ec677301a61ab4e250cacbb87d8f25",
+    "seed": "dojo_starter_jump_chess_39",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -92,6 +92,10 @@
           {
             "name": "metadata_uri",
             "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "metadata_hash",
+            "type": "core::felt252"
           }
         ]
       },
@@ -1002,6 +1006,11 @@
             "name": "uri",
             "type": "core::byte_array::ByteArray",
             "kind": "data"
+          },
+          {
+            "name": "hash",
+            "type": "core::felt252",
+            "kind": "data"
           }
         ]
       },
@@ -1243,8 +1252,8 @@
   },
   "contracts": [
     {
-      "address": "0x124e65340e340c0762d5401a2acf38bb6e101e46d4352e236db13a27b7397b7",
-      "class_hash": "0x66aa87ccebe09152453dd7f47ce1951b9ec7f34c0cd682790eb26cdbf50181",
+      "address": "0x599ed34e633b0cf4ab9e8a0d579fc66e2f1b4005d847a467c164a1b7c137c68",
+      "class_hash": "0x5d96f6e80f8925737fcfaddbf0252c7982cc664014ca6d99ffdf15ecb297a8c",
       "abi": [
         {
           "type": "impl",

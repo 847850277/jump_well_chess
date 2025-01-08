@@ -269,20 +269,30 @@ pub mod actions {
             world.write_model(@players_two);
             // if can move return false else return true
             // check game result
-            // array [0,1,1,1,1] or [1,1,1,0,1] means game over
+            // array [1,0,1,1,1] or [1,1,1,0,1] means game over
             let mut result = false;
-            let first_check_value: u8 = *result_arr.at(0);
+            let first_check_value: u8 = *result_arr.at(1);
             let last_check_value: u8 = *result_arr.at(3);
             if(first_check_value == 0){
-                // players in position 1、4
-                if(players.position_one.name == 1 && players.position_two.name == 4){
+                // players in position 0、4
+                if(players.position_one.name == 0 && players.position_two.name == 4){
                     result = true;
                     game_status = 2;
                 }
+
+                if(players.position_one.name == 4 && players.position_two.name == 0){
+                    result = true;
+                    game_status = 2;
+                }
+
             }
             if(last_check_value == 0){
-                // players in position 1、4
+                // players in position 2、4
                 if(players.position_one.name == 2 && players.position_two.name == 4){
+                    result = true;
+                    game_status = 2;
+                }
+                if(players.position_one.name == 4 && players.position_two.name == 2){
                     result = true;
                     game_status = 2;
                 }
