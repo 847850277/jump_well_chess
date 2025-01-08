@@ -78,7 +78,7 @@ pub mod actions {
             grids.append(item_3);
             grids.append(item_4);
 
-            let container = Container { game_id,status: game_status,creator: player,last_move_player: player, grids };
+            let container = Container { game_id,status: game_status,creator: player,last_move_player: player,winner: contract_zero, grids };
             world.write_model(@container);
             // init position
             let position_one = Position { player,name: 0};
@@ -103,6 +103,7 @@ pub mod actions {
         fn joining_game(ref self: ContractState, game_id: u8) {
 
             let game_status: u8 = 1;
+            let contract_zero = starknet::contract_address_const::<0x0>();
             // Get the default world.
             let mut world = self.world_default();
             // Get the address of the current caller, possibly the player's address.
@@ -133,7 +134,7 @@ pub mod actions {
                 }
                 grids.append(grid_item);
             };
-            let container = Container { game_id, status: game_status,creator: exist_container.creator,last_move_player: player, grids };
+            let container = Container { game_id, status: game_status,creator: exist_container.creator,last_move_player: player, winner: contract_zero,grids };
             world.write_model(@container);
 
             // player_one can move
@@ -268,6 +269,7 @@ pub mod actions {
             };
             world.write_model(@players_two);
             // if can move return false else return true
+            let mut winner = starknet::contract_address_const::<0x0>();
             // check game result
             // array [1,0,1,1,1] or [1,1,1,0,1] means game over
             let mut result = false;
@@ -299,9 +301,10 @@ pub mod actions {
             }
             if(game_status == 2){
                 players.is_winner = true;
+                winner = players.player
             }
             world.write_model(@players);
-            let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player, grids };
+            let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player,winner, grids };
             world.write_model(@container);
             //game end event
             world.emit_event(@GameStatusEvent { game_id, status: game_status});

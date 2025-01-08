@@ -30,6 +30,7 @@ pub struct Container {
     pub status: u8,
     pub creator: ContractAddress,
     pub last_move_player: ContractAddress,
+    pub winner: ContractAddress,
     pub grids: Array<Item>,
 }
 
