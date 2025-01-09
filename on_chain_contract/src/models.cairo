@@ -1,31 +1,10 @@
 use starknet::ContractAddress;
 
-#[derive(Copy, Drop, Serde, Debug)]
-#[dojo::model]
-pub struct Players {
-    #[key]
-    pub player: ContractAddress,
-    #[key]
-    pub game_id: u8,
-    pub position_one: Position,
-    pub position_two: Position,
-    pub can_move: bool,
-    pub color: felt252,
-    pub is_winner: bool,
-}
-
-
-#[derive(Copy, Drop, Serde, IntrospectPacked, Debug)]
-pub struct Position {
-    pub player: ContractAddress,
-    pub name: u8,
-}
-
 #[derive(Drop, Serde, Debug)]
 #[dojo::model]
 pub struct Container {
     #[key]
-    pub game_id: u8,
+    pub game_id: u32,
     // game status 0: created, 1: joined, 2: finished
     pub status: u8,
     pub creator: ContractAddress,
@@ -47,12 +26,12 @@ pub struct Item {
 pub struct Counter {
     #[key]
     pub global_key: felt252,
-    value: u8
+    value: u32,
 }
 
 #[generate_trait]
 impl CounterImpl of CounterTrait {
-    fn get_value(self: Counter) -> u8 {
+    fn get_value(self: Counter) -> u32 {
         self.value
     }
 
