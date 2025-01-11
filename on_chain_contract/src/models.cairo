@@ -11,6 +11,8 @@ pub struct Container {
     pub last_move_player: ContractAddress,
     pub winner: ContractAddress,
     pub grids: Array<Item>,
+    pub p1: ContractAddress,
+    pub p2: ContractAddress,
 }
 
 

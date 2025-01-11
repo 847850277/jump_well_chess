@@ -64,7 +64,7 @@ pub mod actions {
             grids.append(item_3);
             grids.append(item_4);
 
-            let container = Container { game_id,status: game_status,creator: player,last_move_player: player,winner: contract_zero, grids };
+            let container = Container { game_id,status: game_status,creator: player,last_move_player: player,winner: contract_zero, grids, p1: player, p2: contract_zero };
             world.write_model(@container);
             world.emit_event(@GameStatusEvent { game_id, status: game_status});
             game_id
@@ -102,7 +102,7 @@ pub mod actions {
                 }
                 grids.append(grid_item);
             };
-            let container = Container { game_id, status: game_status,creator: exist_container.creator,last_move_player: player, winner: contract_zero,grids };
+            let container = Container { game_id, status: game_status,creator: exist_container.creator,last_move_player: player, winner: contract_zero,grids, p1: exist_container.creator, p2: player };
             world.write_model(@container);
             world.emit_event(@GameStatusEvent { game_id, status: game_status});
 
@@ -150,21 +150,26 @@ pub mod actions {
                 assert(true, 'can not move 3 --> 1');
             }
 
+            // check caller in p1 or p2
+            let same_p1 = same_address(player, exist_container.p1);
+            let same_p2 = same_address(player, exist_container.p2);
+            assert(same_p1 || same_p2, 'player must in p1 or p2');
+
             // check from is valid position
-            //let mut valid_from_position = false;
-            // check to is valid position
-            //let mut valid_to_position = false;
-            //for i in 0..exist_container.grids.len() {
-            //    let mut grid_item = *exist_container.grids.at(i);
-            //    if(grid_item.name == to && grid_item.occupied == false){
-            //        valid_to_position = true;
-            //    }
-            //    if(grid_item.name == from && grid_item.occupied == true && same_address(grid_item.player, player)){
-            //        valid_from_position = true;
-            //    }
-            //};
-            //assert!(valid_to_position == true, "to position is invalid");
-            //assert!(valid_from_position == true, "from position is invalid");
+            let mut valid_from_position = false;
+            //check to is valid position
+            let mut valid_to_position = false;
+            for i in 0..exist_container.grids.len() {
+               let mut grid_item = *exist_container.grids.at(i);
+               if(grid_item.name == to && grid_item.occupied == false){
+                   valid_to_position = true;
+               }
+               if(grid_item.name == from && grid_item.occupied == true && same_address(grid_item.player, player)){
+                   valid_from_position = true;
+               }
+            };
+            assert(valid_from_position, 'from is invalid');
+            assert(valid_to_position, 'to is invalid');
 
             // change container status
             let contract_zero = starknet::contract_address_const::<0x0>();
@@ -225,7 +230,7 @@ pub mod actions {
             if(game_status == 2){
                 winner = player;
             }
-            let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player,winner, grids };
+            let container = Container { game_id, status: game_status, creator: exist_container.creator, last_move_player: player,winner, grids, p1: exist_container.p1, p2: exist_container.p2 };
             world.write_model(@container);
             //game end event
             world.emit_event(@GameStatusEvent { game_id, status: game_status});

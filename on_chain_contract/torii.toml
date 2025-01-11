@@ -1,5 +1,5 @@
 # The World address to index.
-world_address = "0xf58e954491c0ce3f0274592179ccc552815327c2f0e3c2c8c382bafbe7fc1e"
+world_address = "0x0087cef49aae5dd75c2f4de9240fee0b443e1942230668f84c1a6181d4fffe2e"
 
 # Default RPC URL configuration
 rpc = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
