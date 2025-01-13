@@ -1,0 +1,3 @@
+[submodule "jump-chess-frontend"]
+	path = jump-chess-frontend
+	url = https://github.com/YanYuanFE/jump-chess-frontend.git
