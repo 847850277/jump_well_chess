@@ -1,8 +1,8 @@
 {
   "world": {
-    "class_hash": "0x45575a88cc5cef1e444c77ce60b7b4c9e73a01cbbe20926d5a4c72a94011410",
-    "address": "0x87cef49aae5dd75c2f4de9240fee0b443e1942230668f84c1a6181d4fffe2e",
-    "seed": "dojo_starter_jump_chess_48",
+    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
+    "address": "0x77aa2e156b5cd528f44b52ea52f2d2bb93aaebb28a30609cf477f2a50c56e1f",
+    "seed": "dojo_starter_jump_chess_49",
     "name": "Dojo starter",
     "entrypoints": [
       "uuid",
@@ -11,6 +11,7 @@
       "register_event",
       "register_model",
       "register_contract",
+      "register_library",
       "init_contract",
       "upgrade_event",
       "upgrade_model",
@@ -78,6 +79,10 @@
           {
             "name": "Unregistered",
             "type": "()"
+          },
+          {
+            "name": "Library",
+            "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
           }
         ]
       },
@@ -358,6 +363,34 @@
             "outputs": [
               {
                 "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "register_library",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "class_hash",
+                "type": "core::starknet::class_hash::ClassHash"
+              },
+              {
+                "name": "name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "version",
+                "type": "core::byte_array::ByteArray"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::starknet::class_hash::ClassHash"
               }
             ],
             "state_mutability": "external"
@@ -657,6 +690,22 @@
             ],
             "outputs": [],
             "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "owners_count",
+            "inputs": [
+              {
+                "name": "resource",
+                "type": "core::felt252"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::integer::u64"
+              }
+            ],
+            "state_mutability": "view"
           },
           {
             "type": "function",
@@ -967,6 +1016,28 @@
       },
       {
         "type": "event",
+        "name": "dojo::world::world_contract::world::LibraryRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
         "name": "dojo::world::world_contract::world::EventEmitted",
         "kind": "struct",
         "members": [
@@ -1207,6 +1278,11 @@
             "kind": "nested"
           },
           {
+            "name": "LibraryRegistered",
+            "type": "dojo::world::world_contract::world::LibraryRegistered",
+            "kind": "nested"
+          },
+          {
             "name": "EventEmitted",
             "type": "dojo::world::world_contract::world::EventEmitted",
             "kind": "nested"
@@ -1252,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x6053fba50dfc9824256bc52f55534b5e1b4e4ce9173bf8d910ec4a601c425c9",
-      "class_hash": "0x45f9533f75c4b274862417d7cd4bb051c26f5bfdd0e6dde20fb61dfa51cfa05",
+      "address": "0x62fcc868d68e7016514f728beef5846e6116d6acfa259c1f9ece1af63987080",
+      "class_hash": "0x400baa01460d8b4050a85277e6a9ade430da9a83a39951870d2a7f807799ef0",
       "abi": [
         {
           "type": "impl",
@@ -1503,16 +1579,17 @@
       ]
     }
   ],
+  "libraries": [],
   "models": [
     {
       "members": [],
-      "class_hash": "0x3da6c4f1a842176326e5dc0a9532d375e23d87cc092445918d5b1bab31c8427",
+      "class_hash": "0x20fad2b42f4811034dd4079142f816fb8aede0a3ecc6e4ad383d1a3ef4dcba0",
       "tag": "dojo_starter-Container",
       "selector": "0x190e5bbd442fd67623dd73646446e3393a3d17f5838cd7d0567795123f682e1"
     },
     {
       "members": [],
-      "class_hash": "0x1871aed9c866272d4c9a354fe191db226cc5ffa304922334666b080656f35ce",
+      "class_hash": "0x2dd1d0face425ba7861e9be5d22b494489feba36bab4d308eb348857cdc22ae",
       "tag": "dojo_starter-Counter",
       "selector": "0x5c36ccd6a852f08c27bb21b6a8b4ec9fa8b520cb8a961cb32fff0944f7a3ceb"
     }
@@ -1520,9 +1597,10 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x139ccc128f4a145106c487d762ab7ccec528eae025b2698bb125f80554a159f",
+      "class_hash": "0x24b983ae078cc5fb312933e929b4605f44ed8c4976628f296e30b15c1c6debb",
       "tag": "dojo_starter-GameStatusEvent",
       "selector": "0x57ef549f3995bd34b10b73e0377193ca7ac8e47b403fbd96fcc4f89133604a9"
     }
-  ]
+  ],
+  "external_contracts": []
 }

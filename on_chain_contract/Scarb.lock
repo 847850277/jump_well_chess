@@ -3,24 +3,24 @@ version = 1
 
 [[package]]
 name = "dojo"
-version = "1.0.10"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.10#80ac6d1cdf35a855aeb550463e50546dc24a09cc"
+version = "1.5.0"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.5.0#812f17c9c57fd057d0bf1e648a591ea0ca9ea718"
 dependencies = [
  "dojo_plugin",
 ]
 
 [[package]]
 name = "dojo_cairo_test"
-version = "1.0.0-rc.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.10#80ac6d1cdf35a855aeb550463e50546dc24a09cc"
+version = "1.0.12"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.5.0#812f17c9c57fd057d0bf1e648a591ea0ca9ea718"
 dependencies = [
  "dojo",
 ]
 
 [[package]]
 name = "dojo_plugin"
-version = "2.8.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.0.10#80ac6d1cdf35a855aeb550463e50546dc24a09cc"
+version = "2.10.1"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.5.0#812f17c9c57fd057d0bf1e648a591ea0ca9ea718"
 
 [[package]]
 name = "dojo_starter"
